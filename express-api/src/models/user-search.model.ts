@@ -12,4 +12,6 @@ const UserSearchHistorySchema: Schema = new Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-export default mongoose.model<IUserSearchHistory>('UserSearchHistory', UserSearchHistorySchema);
+const UserSearchHistory: mongoose.Model<IUserSearchHistory> = mongoose.model<IUserSearchHistory>('UserSearchHistory', UserSearchHistorySchema);
+
+export default UserSearchHistory;

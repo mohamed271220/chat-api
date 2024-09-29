@@ -12,4 +12,6 @@ const UserOnlineStatusSchema: Schema = new Schema({
   updatedAt: { type: Date, default: Date.now }
 });
 
-export default mongoose.model<IUserOnlineStatus>('UserOnlineStatus', UserOnlineStatusSchema);
+const UserOnlineStatus: mongoose.Model<IUserOnlineStatus> = mongoose.model<IUserOnlineStatus>('UserOnlineStatus', UserOnlineStatusSchema);
+
+export default UserOnlineStatus;

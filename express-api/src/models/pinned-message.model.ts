@@ -14,4 +14,6 @@ const PinnedMessageSchema: Schema = new Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-export default mongoose.model<IPinnedMessage>('PinnedMessage', PinnedMessageSchema);
+const PinnedMessage: mongoose.Model<IPinnedMessage> = mongoose.model<IPinnedMessage>('PinnedMessage', PinnedMessageSchema);
+
+export default PinnedMessage;

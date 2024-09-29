@@ -14,4 +14,7 @@ const MessageReactionSchema: Schema = new Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-export default mongoose.model<IMessageReaction>('MessageReaction', MessageReactionSchema);
+
+const MessageReaction: mongoose.Model<IMessageReaction> = mongoose.model<IMessageReaction>('MessageReaction', MessageReactionSchema);
+
+export default MessageReaction;

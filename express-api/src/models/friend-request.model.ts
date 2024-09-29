@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from "mongoose";
 
 export interface IFriendRequest extends Document {
   sender: mongoose.Types.ObjectId;
@@ -8,10 +8,17 @@ export interface IFriendRequest extends Document {
 }
 
 const FriendRequestSchema: Schema = new Schema({
-  sender: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  receiver: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' },
-  createdAt: { type: Date, default: Date.now }
+  sender: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  receiver: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  status: {
+    type: String,
+    enum: ["pending", "accepted", "rejected"],
+    default: "pending",
+  },
+  createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.model<IFriendRequest>('FriendRequest', FriendRequestSchema);
+const FriendRequest: mongoose.Model<IFriendRequest> =
+  mongoose.model<IFriendRequest>("FriendRequest", FriendRequestSchema);
+
+export default FriendRequest;

@@ -33,7 +33,4 @@ app.use(errorHandler);
 // Swagger docs route
 app.use("/api/v1/official-docs/express-api-docs", swaggerRouter);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+export default app;

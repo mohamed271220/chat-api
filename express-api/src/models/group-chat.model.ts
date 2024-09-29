@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from "mongoose";
 
 export interface IGroupChat extends Document {
   name: string;
@@ -9,9 +9,14 @@ export interface IGroupChat extends Document {
 
 const GroupChatSchema: Schema = new Schema({
   name: { type: String, required: true },
-  members: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  admin: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  createdAt: { type: Date, default: Date.now }
+  members: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  admin: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.model<IGroupChat>('GroupChat', GroupChatSchema);
+const GroupChat: mongoose.Model<IGroupChat> = mongoose.model<IGroupChat>(
+  "GroupChat",
+  GroupChatSchema
+);
+
+export default GroupChat;
