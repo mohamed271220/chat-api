@@ -9,7 +9,6 @@ export interface IUser extends Document {
   resetPasswordToken?: string | null;
   resetPasswordExpires?: Date | null;
   lastSeen?: Date;
-  publicKey: string;
   createdAt: Date;
 }
 
@@ -22,8 +21,9 @@ const UserSchema: Schema = new Schema({
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date },
   lastSeen: { type: Date },
-  publicKey: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.model<IUser>("User", UserSchema);
+const User: mongoose.Model<IUser> = mongoose.model<IUser>("User", UserSchema);
+
+export default User;

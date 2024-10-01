@@ -40,11 +40,12 @@ export const signup = async (
       throw new CustomError("User already exists", 400);
     }
     const passwordHash = await bcrypt.hash(password, 12);
+    
     const id = uuid();
     const savedUser = await User.create({
       id,
       username,
-      passwordHash,
+      password: passwordHash,
       email,
       role: "Student",
     });
@@ -83,20 +84,18 @@ export const login = async (
     if (!email && !username) {
       throw new CustomError("Invalid credentials", 400);
     }
-
+    
     const whereClause: any = {};
-
+    
     if (email) {
       whereClause.email = email;
     }
-
+    
     if (username) {
       whereClause.username = username;
     }
-
-    const user = await User.findOne({
-      where: whereClause,
-    });
+    
+    const user = await User.findOne(whereClause);
     if (!user) throw new CustomError("Invalid credentials", 400);
     const isPasswordValid = await bcrypt.compare(
       req.body.password,

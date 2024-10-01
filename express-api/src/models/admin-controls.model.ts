@@ -10,12 +10,6 @@ export interface IAdminControl extends Document {
 const AdminControlSchema: Schema = new Schema({
   group: { type: Schema.Types.ObjectId, ref: "GroupChat", required: true },
   admin: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  permissions: [
-    {
-      type: String,
-      enum: ["add_member", "remove_member", "ban_user", "change_settings"],
-    },
-  ],
   createdAt: { type: Date, default: Date.now },
 });
 

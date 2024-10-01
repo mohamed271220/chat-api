@@ -4,7 +4,7 @@ export interface IDirectMessage extends Document {
   sender: mongoose.Types.ObjectId;
   receiver: mongoose.Types.ObjectId;
   conversation: mongoose.Types.ObjectId;
-  encryptedMessage?: string;
+  message?: string;
   media?: mongoose.Types.ObjectId;
   createdAt: Date;
   isRead: boolean;
@@ -20,7 +20,7 @@ const DirectMessageSchema: Schema = new Schema({
     ref: "Conversation",
     required: true,
   },
-  encryptedMessage: { type: String },
+  message: { type: String },
   media: { type: Schema.Types.ObjectId, ref: "MediaSharing" },
   createdAt: { type: Date, default: Date.now },
   isRead: { type: Boolean, default: false },

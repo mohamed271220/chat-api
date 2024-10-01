@@ -6,6 +6,12 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { errorHandler } from "./middleware/error-handler";
 
+import authRoutes from "./routes/auth.route";
+import profileRoutes from "./routes/profile.route";
+import directMessageRoutes from "./routes/direct-message.route";
+import uploadRoutes from "./routes/upload.route";
+import groupRoutes from "./routes/group.route";
+
 dotenv.config();
 
 import connectDB from "./config/database";
@@ -28,6 +34,11 @@ app.use(cookieParser());
 connectDB();
 
 // Routes
+app.use("/api/v1/media", uploadRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/profile", profileRoutes);
+app.use("/api/v1/direct-messages", directMessageRoutes);
+app.use("/api/v1/groups", groupRoutes);
 app.use(errorHandler);
 
 // Swagger docs route

@@ -13,6 +13,8 @@ const ConversationSchema = new Schema<ConversationDocument>({
   updatedAt: { type: Date, default: Date.now },
 });
 
+ConversationSchema.index({ participants: 1 }, { unique: true });
+
 const Conversation: Model<ConversationDocument> =
   mongoose.model<ConversationDocument>("Conversation", ConversationSchema);
 

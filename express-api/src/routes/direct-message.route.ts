@@ -20,6 +20,6 @@ router.get("/:receiverId", authenticateToken, getDirectMessages);
 router.post("/:receiverId", authenticateToken, createDirectMessage);
 
 // DELETE /api/v1/direct-message
-router.delete("/:receiverId", authenticateToken, deleteDirectMessage);
+router.delete("/:receiverId/message/:messageId", authenticateToken, deleteDirectMessage);
 
 export default router;

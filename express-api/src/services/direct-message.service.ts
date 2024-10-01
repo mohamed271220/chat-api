@@ -2,7 +2,6 @@ import Conversation from "../models/conversation.model";
 import DirectMessage, { IDirectMessage } from "../models/direct-message.model";
 import MediaSharing from "../models/media.model";
 import { CustomError } from "../utils/CustomError";
-import { decrypt, encrypt } from "../utils/message-encryption";
 
 export class DirectMessageService {
   constructor(
@@ -14,30 +13,30 @@ export class DirectMessageService {
   async getDirectMessages(
     senderId: string,
     receiverId: string
-  ): Promise<any[]> {
+  ): Promise<IDirectMessage[]> {
     // Find the conversation between the sender and receiver
     const conversation = await this.conversationModel.findOne({
-      members: { $all: [senderId, receiverId] },
+      participants: { $all: [senderId, receiverId] },
     });
 
     // If the conversation doesn't exist, return an empty array
     if (!conversation) return [];
 
-    // Fetch the direct messages in the conversation, sorted by creation date
-    const directMessages = await this.directMessageModel
-      .find({ conversation: conversation._id })
+    //edit all the messages in the conversation to be read
+    const messages = await this.directMessageModel
+      .find({
+        conversation: conversation._id,
+      })
       .sort({ createdAt: -1 });
 
-    // Decrypt each message
-    const decryptedMessages = directMessages.map((message) => {
-      const decryptedMessage = decrypt(JSON.parse(message.encryptedMessage!));
-      return {
-        ...message.toObject(),
-        encryptedMessage: decryptedMessage, // Replace the encrypted message with the decrypted one
-      };
+    messages.forEach(async (message) => {
+      if (message.receiver.toString() === senderId) {
+        message.isRead = true;
+        await message.save();
+      }
     });
-
-    return decryptedMessages;
+ 
+    return messages;
   }
 
   async createDirectMessage(
@@ -56,15 +55,12 @@ export class DirectMessageService {
       // Check if media exists
       const mediaId = await this.findOrCreateMedia(senderId, media);
 
-      // Encrypt the message
-      const encryptedMessage = encrypt(message);
-
       // Create a new direct message
       const directMessage = await this.directMessageModel.create({
         sender: senderId,
         receiver: receiverId,
         conversation: conversation._id,
-        encryptedMessage: encryptedMessage,
+        message,
         media: mediaId,
       });
 
@@ -83,7 +79,7 @@ export class DirectMessageService {
   ) {
     // Find the conversation between the sender and receiver
     const conversation = await this.conversationModel.findOne({
-      members: { $all: [senderId, receiverId] },
+      participants: { $all: [senderId, receiverId] },
     });
 
     if (!conversation || !conversation._id) {
@@ -110,12 +106,12 @@ export class DirectMessageService {
 
   private async findOrCreateConversation(senderId: string, receiverId: string) {
     let conversation = await this.conversationModel.findOne({
-      members: { $all: [senderId, receiverId] },
+      participants: { $all: [senderId, receiverId] },
     });
 
     if (!conversation) {
       conversation = await this.conversationModel.create({
-        members: [senderId, receiverId],
+        participants: [senderId, receiverId],
       });
     }
 
@@ -127,7 +123,7 @@ export class DirectMessageService {
       return null;
     }
 
-    const existingMedia = await this.mediaModel.findOne({ _id: media });
+    const existingMedia = await this.mediaModel.findOne({ url: media });
     if (existingMedia) {
       return existingMedia._id;
     }
