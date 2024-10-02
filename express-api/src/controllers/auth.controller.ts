@@ -5,7 +5,7 @@ import {
   verifyRefreshToken,
   verifyToken,
 } from "../utils/jwt";
-import User from "../models/user.model";
+import User from "../models/user/user.model";
 import bcrypt from "bcryptjs";
 import { v4 as uuid } from "uuid";
 import { userRequest } from "../interfaces";
@@ -40,7 +40,7 @@ export const signup = async (
       throw new CustomError("User already exists", 400);
     }
     const passwordHash = await bcrypt.hash(password, 12);
-    
+
     const id = uuid();
     const savedUser = await User.create({
       id,
@@ -84,17 +84,17 @@ export const login = async (
     if (!email && !username) {
       throw new CustomError("Invalid credentials", 400);
     }
-    
+
     const whereClause: any = {};
-    
+
     if (email) {
       whereClause.email = email;
     }
-    
+
     if (username) {
       whereClause.username = username;
     }
-    
+
     const user = await User.findOne(whereClause);
     if (!user) throw new CustomError("Invalid credentials", 400);
     const isPasswordValid = await bcrypt.compare(

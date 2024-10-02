@@ -1,8 +1,8 @@
 // src/socket/index.ts
 import { Server, Socket } from "socket.io";
 import cookie from "cookie";
-import GroupMessage from "../models/group-message.model";
-import DirectMessage from "../models/direct-message.model";
+import GroupMessage from "../models/groupMessage/group-message.model";
+import DirectMessage from "../models/directMessage/direct-message.model";
 import { verifyToken } from "../utils/jwt"; // Ensure this path is correct
 export interface AuthenticatedSocket extends Socket {
   user: {

@@ -1,4 +1,4 @@
-import  express  from "express";
+import express from "express";
 
 import { authenticateToken } from "../middleware/auth.middleware";
 
@@ -6,6 +6,7 @@ import {
   getDirectMessages,
   createDirectMessage,
   deleteDirectMessage,
+  addReactionToDirectMessage,
 } from "../controllers/direct-message.controller";
 
 const router = express.Router();
@@ -20,6 +21,17 @@ router.get("/:receiverId", authenticateToken, getDirectMessages);
 router.post("/:receiverId", authenticateToken, createDirectMessage);
 
 // DELETE /api/v1/direct-message
-router.delete("/:receiverId/message/:messageId", authenticateToken, deleteDirectMessage);
+router.delete(
+  "/:receiverId/message/:messageId",
+  authenticateToken,
+  deleteDirectMessage
+);
+
+// Add reaction to direct message
+router.post(
+  "/:messageId/reactions",
+  authenticateToken,
+  addReactionToDirectMessage
+);
 
 export default router;

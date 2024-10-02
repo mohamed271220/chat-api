@@ -1,11 +1,5 @@
-import mongoose, { Document, Schema, Model } from "mongoose";
-import { IUser } from "./user.model"; // Assuming you have a IUser type
-
-interface ConversationDocument extends Document {
-  participants: IUser["_id"][];
-  createdAt: Date;
-  updatedAt: Date;
-}
+import mongoose, { Schema, Model } from "mongoose";
+import { ConversationDocument } from "./conversation.interface";
 
 const ConversationSchema = new Schema<ConversationDocument>({
   participants: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],

@@ -1,16 +1,5 @@
-import mongoose, { Document, Schema } from "mongoose";
-
-export interface IUser extends Document {
-  username: string;
-  email: string;
-  password: string;
-  friends: mongoose.Types.ObjectId[];
-  isOnline: boolean;
-  resetPasswordToken?: string | null;
-  resetPasswordExpires?: Date | null;
-  lastSeen?: Date;
-  createdAt: Date;
-}
+import mongoose, {  Schema } from "mongoose";
+import { IUser } from "./user.interface";
 
 const UserSchema: Schema = new Schema({
   username: { type: String, required: true, unique: true },

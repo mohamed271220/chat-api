@@ -1,16 +1,6 @@
-import mongoose, { Document, Model, Schema } from "mongoose";
-
-export interface IDirectMessage extends Document {
-  sender: mongoose.Types.ObjectId;
-  receiver: mongoose.Types.ObjectId;
-  conversation: mongoose.Types.ObjectId;
-  message?: string;
-  media?: mongoose.Types.ObjectId;
-  createdAt: Date;
-  isRead: boolean;
-  deliveredAt?: Date;
-  readAt?: Date;
-}
+import mongoose, { Model, Schema } from "mongoose";
+import ReactionSchema from "../shared/reaction.schema";
+import { IDirectMessage } from "./direct-message.interface";
 
 const DirectMessageSchema: Schema = new Schema({
   sender: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -26,6 +16,19 @@ const DirectMessageSchema: Schema = new Schema({
   isRead: { type: Boolean, default: false },
   deliveredAt: { type: Date },
   readAt: { type: Date },
+  reactions: { type: [ReactionSchema], default: [] },
+});
+
+// Custom validation to ensure at least one of message or media is provided
+DirectMessageSchema.pre("validate", function (next) {
+  if (!this.message && !this.media) {
+    const err = new Error(
+      "At least one of 'message' or 'media' must be provided."
+    );
+    next(err);
+  } else {
+    next();
+  }
 });
 
 const DirectMessage: Model<IDirectMessage> = mongoose.model<IDirectMessage>(

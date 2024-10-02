@@ -1,11 +1,5 @@
-import mongoose, { Document, Schema } from "mongoose";
-
-export interface IAdminControl extends Document {
-  group: mongoose.Types.ObjectId;
-  admin: mongoose.Types.ObjectId;
-  permissions: string[];
-  createdAt: Date;
-}
+import mongoose, {  Schema } from "mongoose";
+import { IAdminControl } from "./admin-controls.interface";
 
 const AdminControlSchema: Schema = new Schema({
   group: { type: Schema.Types.ObjectId, ref: "GroupChat", required: true },

@@ -1,11 +1,5 @@
-import mongoose, { Document, Schema } from "mongoose";
-
-export interface IFriendRequest extends Document {
-  sender: mongoose.Types.ObjectId;
-  receiver: mongoose.Types.ObjectId;
-  status: string;
-  createdAt: Date;
-}
+import mongoose, { Schema } from "mongoose";
+import { IFriendRequest } from "./friend-request.interface";
 
 const FriendRequestSchema: Schema = new Schema({
   sender: { type: Schema.Types.ObjectId, ref: "User", required: true },

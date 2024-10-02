@@ -1,13 +1,13 @@
-import Conversation from "../models/conversation.model";
-import DirectMessage, { IDirectMessage } from "../models/direct-message.model";
-import MediaSharing from "../models/media.model";
+import Conversation from "../models/conversation/conversation.model";
+import { IDirectMessage } from "../models/directMessage/direct-message.interface";
+import DirectMessage from "../models/directMessage/direct-message.model";
 import { CustomError } from "../utils/CustomError";
+import { findOrCreateMedia } from "./utils/media.service.utils";
 
 export class DirectMessageService {
   constructor(
     private directMessageModel: typeof DirectMessage = DirectMessage,
     private conversationModel: typeof Conversation = Conversation,
-    private mediaModel: typeof MediaSharing = MediaSharing
   ) {}
 
   async getDirectMessages(
@@ -35,7 +35,7 @@ export class DirectMessageService {
         await message.save();
       }
     });
- 
+
     return messages;
   }
 
@@ -53,7 +53,7 @@ export class DirectMessageService {
       );
 
       // Check if media exists
-      const mediaId = await this.findOrCreateMedia(senderId, media);
+      const mediaId = await findOrCreateMedia(senderId, media);
 
       // Create a new direct message
       const directMessage = await this.directMessageModel.create({
@@ -118,21 +118,5 @@ export class DirectMessageService {
     return conversation;
   }
 
-  private async findOrCreateMedia(senderId: string, media: string) {
-    if (!media) {
-      return null;
-    }
-
-    const existingMedia = await this.mediaModel.findOne({ url: media });
-    if (existingMedia) {
-      return existingMedia._id;
-    }
-
-    const newMedia = await this.mediaModel.create({
-      user: senderId,
-      url: media,
-    });
-
-    return newMedia._id;
-  }
+ 
 }

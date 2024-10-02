@@ -11,6 +11,7 @@ import profileRoutes from "./routes/profile.route";
 import directMessageRoutes from "./routes/direct-message.route";
 import uploadRoutes from "./routes/upload.route";
 import groupRoutes from "./routes/group.route";
+import groupMessageRoutes from "./routes/group-message.routes";
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/profile", profileRoutes);
 app.use("/api/v1/direct-messages", directMessageRoutes);
 app.use("/api/v1/groups", groupRoutes);
+app.use("/api/v1/group-messages", groupMessageRoutes);
 app.use(errorHandler);
 
 // Swagger docs route

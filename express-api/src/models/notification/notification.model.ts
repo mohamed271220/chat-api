@@ -1,12 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
-
-export interface INotification extends Document {
-  user: mongoose.Types.ObjectId;
-  type: string;
-  message: string;
-  isRead: boolean;
-  createdAt: Date;
-}
+import { INotification } from "./notification.interface";
 
 const NotificationSchema: Schema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },

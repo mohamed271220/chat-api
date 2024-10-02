@@ -1,11 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
-
-export interface IGroupChat extends Document {
-  name: string;
-  members: mongoose.Types.ObjectId[];
-  creator: mongoose.Types.ObjectId;
-  createdAt: Date;
-}
+import { IGroupChat } from "./group-chat.interface";
 
 const GroupChatSchema: Schema = new Schema({
   name: { type: String, required: true },

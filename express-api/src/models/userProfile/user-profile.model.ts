@@ -1,20 +1,5 @@
-import mongoose, { Document, Model, Schema } from "mongoose";
-
-export interface IUserRef {
-  user: mongoose.Types.ObjectId;
-}
-
-export interface IUserDetails {
-  website?: string;
-  firstName?: string;
-  lastName?: string;
-  bio?: string;
-  avatarUrl?: string;
-}
-
-export interface IUserProfile extends IUserRef, IUserDetails, Document {
-  createdAt: Date;
-}
+import mongoose, {  Model, Schema } from "mongoose";
+import { IUserProfile } from "./user-profile.interface";
 
 const UserProfileSchema: Schema = new Schema({
   user: {

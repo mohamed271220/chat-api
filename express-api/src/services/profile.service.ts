@@ -1,7 +1,5 @@
-import UserProfile, {
-  IUserDetails,
-  IUserProfile,
-} from "../models/user-profile.model";
+import { IUserDetails, IUserProfile } from "../models/userProfile/user-profile.interface";
+import UserProfile from "../models/userProfile/user-profile.model";
 import { CustomError } from "../utils/CustomError";
 
 export class ProfileService {

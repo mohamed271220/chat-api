@@ -73,3 +73,5 @@ export const deleteDirectMessage = async (
     next(error);
   }
 };
+
+export const addReactionToDirectMessage = async () => {};
