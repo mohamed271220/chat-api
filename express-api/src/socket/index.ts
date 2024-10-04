@@ -1,18 +1,21 @@
-// src/socket/index.ts
 import { Server, Socket } from "socket.io";
 import cookie from "cookie";
 import GroupMessage from "../models/groupMessage/group-message.model";
 import DirectMessage from "../models/directMessage/direct-message.model";
-import { verifyToken } from "../utils/jwt"; // Ensure this path is correct
+import { verifyToken } from "../utils/jwt";
+
 export interface AuthenticatedSocket extends Socket {
   user: {
     id: string;
   };
 }
-export default function initializeSocketIO(server: any) {
+
+import { Server as HTTPServer } from "http";
+
+export default function initializeSocketIO(server: HTTPServer): Server {
   const io = new Server(server, {
     cors: {
-      origin: true, // Adjust this according to your needs
+      origin: true,
       credentials: true,
     },
   });
@@ -33,57 +36,50 @@ export default function initializeSocketIO(server: any) {
       (socket as AuthenticatedSocket).user = { id: user.id };
       next();
     } catch (error) {
-      console.error(error);
+      console.error("Authentication error:", error);
       return next(new Error("Authentication error"));
     }
   });
 
-  io.on("connection", (socket) => {
+
+  io.on("connection", (socket: Socket) => {
     const authenticatedSocket = socket as AuthenticatedSocket;
     const userId = authenticatedSocket.user.id;
-    socket.join(userId); // User joins their personal room
-
+    authenticatedSocket.join(userId);
     console.log(`User connected: ${userId}`);
 
-    // Handle user joining a chat room
-    authenticatedSocket.on("joinRoom", (room) => {
-      authenticatedSocket.join(room);
+    socket.on("joinRoom", (room: string) => {
+      socket.join(room);
+      console.log(`User ${userId} joined room: ${room}`);
     });
 
-    // Handle sending a group message
-    authenticatedSocket.on("sendGroupMessage", async ({ room, message }) => {
+    socket.on("sendGroupMessage", async ({ room, message, media }) => {
       const newMessage = new GroupMessage({
         group: room,
         sender: userId,
-        encryptedMessage: message,
+        message: message,
+        media: media,
         createdAt: new Date(),
         isRead: false,
       });
 
       await newMessage.save();
-
       io.to(room).emit("receiveGroupMessage", newMessage);
     });
 
-    // Handle sending a direct message
-    authenticatedSocket.on(
-      "sendDirectMessage",
-      async ({ receiverId, message }) => {
-        const newMessage = new DirectMessage({
-          sender: userId,
-          receiver: receiverId,
-          encryptedMessage: message,
-          createdAt: new Date(),
-        });
+    socket.on("sendDirectMessage", async ({ receiverId, message, media }) => {
+      const newMessage = new DirectMessage({
+        sender: userId,
+        receiver: receiverId,
+        message: message,
+        media: media,
+        createdAt: new Date(),
+      });
+      await newMessage.save();
+      io.to(receiverId).emit("receiveDirectMessage", newMessage);
+    });
 
-        await newMessage.save();
-
-        io.to(receiverId).emit("receiveDirectMessage", newMessage);
-      }
-    );
-
-    // Handle user disconnecting
-    authenticatedSocket.on("disconnect", () => {
+    socket.on("disconnect", () => {
       console.log(`User disconnected: ${userId}`);
     });
   });

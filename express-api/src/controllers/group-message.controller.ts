@@ -106,7 +106,7 @@ export const addReactionToGroupMessage = async (
   try {
     if (!req.user) throw new CustomError("Unauthorized", 401);
     const userId = req.user.id;
-    const { messageId,groupId } = req.params;
+    const { messageId, groupId } = req.params;
     const { reactionTypeId } = req.body;
 
     const updatedMessage = await groupMessageService.addReactionToGroupMessage(

@@ -1,13 +1,18 @@
+import mongoose from "mongoose";
 import Conversation from "../models/conversation/conversation.model";
 import { IDirectMessage } from "../models/directMessage/direct-message.interface";
 import DirectMessage from "../models/directMessage/direct-message.model";
+import ReactionType from "../models/reactionType/reaction-type.model";
 import { CustomError } from "../utils/CustomError";
+import { checkUserExists } from "./utils/group-chat.service.utils";
 import { findOrCreateMedia } from "./utils/media.service.utils";
+import { IReaction } from "../models/shared/reaction.schema";
 
 export class DirectMessageService {
   constructor(
     private directMessageModel: typeof DirectMessage = DirectMessage,
     private conversationModel: typeof Conversation = Conversation,
+    private reactionTypeModel: typeof ReactionType = ReactionType
   ) {}
 
   async getDirectMessages(
@@ -118,5 +123,38 @@ export class DirectMessageService {
     return conversation;
   }
 
- 
+  async addReactionToGroupMessage(
+    userId: string,
+    messageId: string,
+    reactionTypeId: string
+  ) {
+    await checkUserExists(userId);
+
+    const message = await this.directMessageModel.findById(messageId);
+    if (!message) throw new CustomError("Message not found", 404);
+
+    const reactionTypeDoc = await this.reactionTypeModel.findById(
+      reactionTypeId
+    );
+    if (!reactionTypeDoc) throw new CustomError("Reaction type not found", 404);
+
+    // Check if the user has already reacted to the message
+    const existingReaction = message.reactions.find(
+      (reaction) => reaction.user.toString() === userId
+    );
+
+    if (existingReaction) {
+      // Update the existing reaction
+      existingReaction.reactionType = new mongoose.Types.ObjectId(
+        reactionTypeId
+      );
+    } else {
+      message.reactions.push({
+        user: new mongoose.Types.ObjectId(userId),
+        reactionType: new mongoose.Types.ObjectId(reactionTypeId),
+      } as IReaction);
+    }
+
+    return await message.save();
+  }
 }

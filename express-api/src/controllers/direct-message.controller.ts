@@ -74,4 +74,28 @@ export const deleteDirectMessage = async (
   }
 };
 
-export const addReactionToDirectMessage = async () => {};
+export const addReactionToDirectMessage = async (
+  req: userRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.user) throw new CustomError("Unauthorized", 401);
+    const userId = req.user.id;
+    const { messageId } = req.params;
+    const { reactionTypeId } = req.body;
+
+    const updatedMessage = await directMessageService.addReactionToGroupMessage(
+      userId,
+      messageId,
+      reactionTypeId
+    );
+
+    res
+      .status(200)
+      .json({ message: "Reaction added successfully", updatedMessage });
+  } catch (error) {
+    next(error);
+  }
+};
+

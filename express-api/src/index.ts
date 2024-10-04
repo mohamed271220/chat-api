@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { errorHandler } from "./middleware/error-handler";
 
+// routes imports
 import authRoutes from "./routes/auth.route";
 import profileRoutes from "./routes/profile.route";
 import directMessageRoutes from "./routes/direct-message.route";
