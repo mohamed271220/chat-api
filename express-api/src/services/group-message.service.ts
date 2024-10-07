@@ -20,12 +20,8 @@ import { findOrCreateMedia } from "./utils/media.service.utils";
 
 export class GroupMessageService {
   constructor(
-    private groupChatModel: typeof GroupChat = GroupChat,
     private groupMessageModel: typeof GroupMessage = GroupMessage,
-    private userModel: typeof User = User,
-    private reactionModel: typeof ReactionSchema = ReactionSchema,
     private reactionTypeModel: typeof ReactionType = ReactionType,
-    private mediaModel: typeof MediaSharing = MediaSharing
   ) {}
 
   async sendGroupMessage(
