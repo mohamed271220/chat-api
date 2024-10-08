@@ -64,7 +64,7 @@ Before you begin, ensure you have the following installed:
 
 ## Authentication
 
-This API uses JWT (JSON Web Tokens) for authentication. After logging in, users receive a token that must be included in the `Authorization` header for protected routes.
+This API uses JWT (JSON Web Tokens) for authentication. After logging in, users receive a token that must be included in a cookie
 
 ### Example:
 
