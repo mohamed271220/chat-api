@@ -66,11 +66,6 @@ Before you begin, ensure you have the following installed:
 
 This API uses JWT (JSON Web Tokens) for authentication. After logging in, users receive a token that must be included in a cookie
 
-### Example:
-
-```bash
-Authorization: Bearer your_jwt_token
-```
 
 ## Technologies Used
 
