@@ -1,0 +1,268 @@
+openapi: 3.0.0
+info:
+  title: Profile Management API
+  version: 1.0.0
+  description: API for managing user profiles
+servers:
+  - url: http://localhost:3000/api/v1
+tags:
+  - name: Profile
+    description: Operations related to user profiles
+
+paths:
+  /api/v1/profile:
+    get:
+      tags:
+        - Profile
+      summary: Get user profile
+      description: Retrieve the profile of the authenticated user.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Profile found"
+                  profile:
+                    type: object
+                    properties:
+                      user:
+                        type: string
+                        example: "userId"
+                      website:
+                        type: string
+                        example: "https://example.com"
+                      firstName:
+                        type: string
+                        example: "John"
+                      lastName:
+                        type: string
+                        example: "Doe"
+                      bio:
+                        type: string
+                        example: "Developer and Tech Enthusiast"
+                      avatarUrl:
+                        type: string
+                        example: "https://example.com/avatar.jpg"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized"
+
+    post:
+      tags:
+        - Profile
+      summary: Create user profile
+      description: Create a new profile for the authenticated user.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - website
+                - firstName
+                - lastName
+                - bio
+                - avatarUrl
+              properties:
+                website:
+                  type: string
+                  example: "https://example.com"
+                firstName:
+                  type: string
+                  example: "John"
+                lastName:
+                  type: string
+                  example: "Doe"
+                bio:
+                  type: string
+                  example: "Developer and Tech Enthusiast"
+                avatarUrl:
+                  type: string
+                  example: "https://example.com/avatar.jpg"
+      responses:
+        '201':
+          description: Profile created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Profile created"
+                  profile:
+                    type: object
+                    properties:
+                      user:
+                        type: string
+                        example: "userId"
+                      website:
+                        type: string
+                        example: "https://example.com"
+                      firstName:
+                        type: string
+                        example: "John"
+                      lastName:
+                        type: string
+                        example: "Doe"
+                      bio:
+                        type: string
+                        example: "Developer and Tech Enthusiast"
+                      avatarUrl:
+                        type: string
+                        example: "https://example.com/avatar.jpg"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized"
+        '400':
+          description: Profile already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Profile already exists"
+
+    put:
+      tags:
+        - Profile
+      summary: Update user profile
+      description: Update the profile of the authenticated user.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                website:
+                  type: string
+                  example: "https://example.com"
+                firstName:
+                  type: string
+                  example: "John"
+                lastName:
+                  type: string
+                  example: "Doe"
+                bio:
+                  type: string
+                  example: "Developer and Tech Enthusiast"
+                avatarUrl:
+                  type: string
+                  example: "https://example.com/avatar.jpg"
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Profile updated"
+                  profile:
+                    type: object
+                    properties:
+                      user:
+                        type: string
+                        example: "userId"
+                      website:
+                        type: string
+                        example: "https://example.com"
+                      firstName:
+                        type: string
+                        example: "John"
+                      lastName:
+                        type: string
+                        example: "Doe"
+                      bio:
+                        type: string
+                        example: "Developer and Tech Enthusiast"
+                      avatarUrl:
+                        type: string
+                        example: "https://example.com/avatar.jpg"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized"
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Profile not found"
+
+    delete:
+      tags:
+        - Profile
+      summary: Delete user profile
+      description: Delete the profile of the authenticated user.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Profile deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Profile deleted"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

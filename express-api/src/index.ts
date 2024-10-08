@@ -14,6 +14,7 @@ import uploadRoutes from "./routes/upload.route";
 import groupRoutes from "./routes/group.route";
 import groupMessageRoutes from "./routes/group-message.routes";
 import friendRequestRoutes from "./routes/friend-request.route";
+import reactionRoutes from "./routes/reactions.route";
 
 dotenv.config();
 
@@ -44,6 +45,7 @@ app.use("/api/v1/direct-messages", directMessageRoutes);
 app.use("/api/v1/groups", groupRoutes);
 app.use("/api/v1/group-messages", groupMessageRoutes);
 app.use("/api/v1/friend-requests", friendRequestRoutes);
+app.use("/api/v1/reactions", reactionRoutes);
 
 // Swagger docs route
 app.use("/api/v1/official-docs/express-api-docs", swaggerRouter);

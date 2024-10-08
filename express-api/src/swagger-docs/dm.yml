@@ -1,0 +1,192 @@
+openapi: 3.0.1
+info:
+  title: Direct Messaging API
+  description: API for handling direct messages between users
+  version: 1.0.0
+
+servers:
+  - url: /api/v1
+
+tags:
+  - name: DirectMessage
+    description: Operations related to direct messaging
+
+paths:
+  /api/v1/direct-message/{receiverId}:
+    get:
+      tags:
+        - DirectMessage
+      summary: Get direct messages between logged-in user and receiver
+      description: Retrieve the conversation filled with direct messages between the logged-in user and the receiver.
+      parameters:
+        - name: receiverId
+          in: path
+          required: true
+          description: The ID of the receiver user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully fetched messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Fetched messages successfully
+                  messages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DirectMessage'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+    post:
+      tags:
+        - DirectMessage
+      summary: Create a direct message
+      description: Send a direct message to the specified receiver.
+      parameters:
+        - name: receiverId
+          in: path
+          required: true
+          description: The ID of the receiver user
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                media:
+                  type: string
+      responses:
+        '201':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Message sent successfully
+                  dm:
+                    $ref: '#/components/schemas/DirectMessage'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+  /api/v1/direct-message/{receiverId}/message/{messageId}:
+    delete:
+      tags:
+        - DirectMessage
+      summary: Delete a direct message
+      description: Delete a specific direct message in the conversation between the logged-in user and the receiver.
+      parameters:
+        - name: receiverId
+          in: path
+          required: true
+          description: The ID of the receiver user
+          schema:
+            type: string
+        - name: messageId
+          in: path
+          required: true
+          description: The ID of the message to be deleted
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Message deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Message deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+  /api/v1/direct-message/{messageId}/reactions:
+    post:
+      tags:
+        - DirectMessage
+      summary: Add a reaction to a direct message
+      description: Add a reaction to a specific direct message.
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          description: The ID of the message to add a reaction to
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reactionTypeId:
+                  type: string
+                  description: The ID of the reaction type
+      responses:
+        '200':
+          description: Reaction added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Reaction added successfully
+                  updatedMessage:
+                    $ref: '#/components/schemas/DirectMessage'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+
+components:
+  schemas:
+    DirectMessage:
+      type: object
+      properties:
+        id:
+          type: string
+        sender:
+          type: string
+        receiver:
+          type: string
+        message:
+          type: string
+        media:
+          type: string
+        isRead:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        reactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reaction'
+    Reaction:
+      type: object
+      properties:
+        user:
+          type: string
+        reactionType:
+          type: string

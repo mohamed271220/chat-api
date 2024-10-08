@@ -12,6 +12,8 @@ import {
 
 const router = express.Router();
 
+// /api/v1/group-messages
+
 router.post("/group/:groupId", authenticateToken, sendGroupMessage);
 
 router.get("/group/:groupId", authenticateToken, getGroupMessages);

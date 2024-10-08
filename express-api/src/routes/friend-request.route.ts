@@ -8,7 +8,10 @@ import {
   acceptFriendRequest,
   rejectFriendRequest,
   removeFriend,
+  getSentFriendRequests,
 } from "../controllers/friend-request.controller";
+
+// /api/v1/friend-requests
 
 const router = express.Router();
 
@@ -16,7 +19,7 @@ const router = express.Router();
 router.get("/", authenticateToken, getFriendRequests);
 
 // get sent friend requests
-router.get("/sent", authenticateToken, getFriendRequests);
+router.get("/sent", authenticateToken, getSentFriendRequests);
 
 // get friends
 router.get("/friends", authenticateToken, getFriends);

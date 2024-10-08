@@ -13,7 +13,7 @@ import {
 } from "../controllers/group.controller";
 
 const router = express.Router();
-
+// /api/v1/groups
 router.post("/", authenticateToken, createGroup);
 router.get("/:groupId", authenticateToken, getGroup);
 router.put("/:groupId/name", authenticateToken, updateGroup);

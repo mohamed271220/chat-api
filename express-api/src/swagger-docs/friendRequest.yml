@@ -1,0 +1,259 @@
+openapi: 3.0.0
+info:
+  title: Friend Request API
+  version: 1.0.0
+  description: API for managing friend requests and friendships.
+tags:
+  - name: Friend Requests
+    description: Operations related to friend requests and friendships.
+
+paths:
+  /api/v1/friend-requests:
+    get:
+      tags:
+        - Friend Requests
+      summary: Get all friend requests
+      description: Retrieve a list of incoming friend requests.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully fetched friend requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Fetched friend requests successfully
+                  friendRequests:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sender:
+                          type: string
+                          example: "603d2f4e3f30d20a2f3f0f1c"
+                        receiver:
+                          type: string
+                          example: "603d2f4e3f30d20a2f3f0f2"
+                        status:
+                          type: string
+                          example: "pending"
+
+  /api/v1/friend-requests/sent:
+    get:
+      tags:
+        - Friend Requests
+      summary: Get all sent friend requests
+      description: Retrieve a list of sent friend requests.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully fetched sent friend requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Fetched sent friend requests successfully
+                  sentFriendRequests:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sender:
+                          type: string
+                          example: "603d2f4e3f30d20a2f3f0f1c"
+                        receiver:
+                          type: string
+                          example: "603d2f4e3f30d20a2f3f0f2"
+                        status:
+                          type: string
+                          example: "pending"
+
+  /api/v1/friend-requests/friends:
+    get:
+      tags:
+        - Friend Requests
+      summary: Get all friends
+      description: Retrieve a list of all friends of the authenticated user.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully fetched friends
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Fetched friends successfully
+                  friends:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                          example: "john_doe"
+                        email:
+                          type: string
+                          example: "john@example.com"
+
+  /api/v1/friend-requests/friends/{friendId}:
+    get:
+      tags:
+        - Friend Requests
+      summary: Get a specific friend
+      description: Retrieve information about a specific friend by ID.
+      parameters:
+        - name: friendId
+          in: path
+          required: true
+          description: ID of the friend to retrieve
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully fetched friend information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Fetched friend successfully
+                  friend:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        example: "john_doe"
+                      email:
+                        type: string
+                        example: "john@example.com"
+
+  /api/v1/friend-requests/send/{receiverId}:
+    post:
+      tags:
+        - Friend Requests
+      summary: Send a friend request
+      description: Send a friend request to another user.
+      parameters:
+        - name: receiverId
+          in: path
+          required: true
+          description: ID of the user to whom the friend request is sent
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Friend request sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Friend request sent successfully
+
+  /api/v1/friend-requests/accept/{requestId}:
+    post:
+      tags:
+        - Friend Requests
+      summary: Accept a friend request
+      description: Accept a pending friend request by ID.
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          description: ID of the friend request to accept
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Friend request accepted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Friend request accepted successfully
+
+  /api/v1/friend-requests/reject/{requestId}:
+    post:
+      tags:
+        - Friend Requests
+      summary: Reject a friend request
+      description: Reject a pending friend request by ID.
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          description: ID of the friend request to reject
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Friend request rejected successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Friend request rejected successfully
+
+  /api/v1/friend-requests/friends/{friendId}/:
+    delete:
+      tags:
+        - Friend Requests
+      summary: Remove a friend
+      description: Remove a friend by ID.
+      parameters:
+        - name: friendId
+          in: path
+          required: true
+          description: ID of the friend to remove
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Friend removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Friend removed successfully
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

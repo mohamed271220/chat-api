@@ -1,0 +1,336 @@
+openapi: 3.0.0
+info:
+  title: Authentication API
+  version: 1.0.0
+  description: API for user authentication, including login, signup, and password management.
+
+tags:
+  - name: Authentication
+    description: Endpoints for user authentication and account management.
+
+paths:
+  /api/v1/auth/profile:
+    get:
+      tags:
+        - Authentication
+      summary: Retrieve user profile
+      description: Fetches the details of the authenticated user's profile.
+      operationId: getUserProfile
+      responses:
+        '200':
+          description: Successfully retrieved user profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                    example: "63b2a6eabf92c154b0e5a8a7"
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized"
+
+  /api/v1/auth/signup:
+    post:
+      tags:
+        - Authentication
+      summary: User signup
+      description: Creates a new user account with the provided credentials.
+      operationId: signupUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "john_doe"
+                password:
+                  type: string
+                  example: "P@ssw0rd"
+                email:
+                  type: string
+                  example: "john.doe@example.com"
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User created successfully"
+                  userId:
+                    type: string
+                    example: "63b2a6eabf92c154b0e5a8a7"
+        '400':
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User already exists"
+
+  /api/v1/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticates a user and generates a session token.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "john.doe@example.com"
+                password:
+                  type: string
+                  example: "P@ssw0rd"
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Login successful"
+                  userId:
+                    type: string
+                    example: "63b2a6eabf92c154b0e5a8a7"
+        '400':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid credentials"
+
+  /api/v1/auth/logout:
+    get:
+      tags:
+        - Authentication
+      summary: User logout
+      description: Logs the user out and clears session tokens.
+      operationId: logoutUser
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Logout successful"
+
+  /api/v1/auth/validate-token:
+    get:
+      tags:
+        - Authentication
+      summary: Validate session token
+      description: Verifies the authenticity of the session token.
+      operationId: validateUserSession
+      responses:
+        '200':
+          description: Session is valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                    example: "63b2a6eabf92c154b0e5a8a7"
+        '401':
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized"
+
+  /api/v1/auth/refresh-token:
+    get:
+      tags:
+        - Authentication
+      summary: Refresh access token
+      description: Generates a new access token using a valid refresh token.
+      operationId: refreshUserToken
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Token refreshed successfully"
+
+  /api/v1/auth/forgot-password:
+    post:
+      tags:
+        - Authentication
+      summary: Request password reset
+      description: Sends a password reset link to the user's email.
+      operationId: forgotPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "john.doe@example.com"
+      responses:
+        '200':
+          description: Password reset email sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Password reset email sent"
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User not found"
+
+  /api/v1/auth/reset-password/{token}:
+    post:
+      tags:
+        - Authentication
+      summary: Reset user password
+      description: Resets the user's password using the provided token.
+      operationId: resetPassword
+      parameters:
+        - name: token
+          in: path
+          required: true
+          description: The password reset token
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: "NewP@ssw0rd"
+      responses:
+        '200':
+          description: Password has been reset
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Password has been reset"
+        '400':
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid or expired token"
+
+  /api/v1/auth/change-password:
+    post:
+      tags:
+        - Authentication
+      summary: Change user password
+      description: Changes the user's current password to a new password.
+      operationId: changePassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                currentPassword:
+                  type: string
+                  example: "OldP@ssw0rd"
+                newPassword:
+                  type: string
+                  example: "NewP@ssw0rd"
+      responses:
+        '200':
+          description: Password has been changed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Password has been changed"
+        '400':
+          description: Invalid password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid password"
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User not found"

@@ -1,0 +1,69 @@
+openapi: 3.0.0
+info:
+  title: Reaction API
+  version: 1.0.0
+  description: API for managing reactions in the messaging system.
+
+tags:
+  - name: Reactions
+    description: Endpoints related to message reactions.
+
+paths:
+  /api/v1/reactions:
+    get:
+      tags:
+        - Reactions
+      summary: Retrieve all reactions for a message
+      description: Fetches a list of all available reactions that can be used in messages.
+      operationId: getAllReactions
+      responses:
+        '200':
+          description: Successfully retrieved reactions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Fetched reactions successfully"
+                  reactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReactionType'
+        '401':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "An error occurred"
+
+components:
+  schemas:
+    ReactionType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "63b2a6eabf92c154b0e5a8a7"
+        name:
+          type: string
+          example: "Like"
+        emoji:
+          type: string
+          example: "👍"

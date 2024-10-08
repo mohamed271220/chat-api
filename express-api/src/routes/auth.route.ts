@@ -5,6 +5,7 @@ import {
   validateLogin,
   validateSignup,
 } from "../middleware/validators/authValidators";
+// /api/v1/auth
 const router = express.Router();
 
 router.get("/profile", authenticateToken, authController.getUserDetails);

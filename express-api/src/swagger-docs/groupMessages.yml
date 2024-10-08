@@ -1,0 +1,219 @@
+openapi: 3.0.0
+info:
+  title: Group Message API
+  version: 1.0.0
+  description: API for managing group messages in a chat application
+servers:
+  - url: http://localhost:3000/api/v1
+tags:
+  - name: Group Messages
+    description: Operations related to group messaging
+
+paths:
+  /group/{groupId}:
+    post:
+      tags:
+        - Group Messages
+      summary: Send a message to a group
+      description: Allows a user to send a message to a specified group.
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The ID of the group to which the message is being sent.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: The message content.
+                media:
+                  type: string
+                  description: Optional media URL.
+      responses:
+        '201':
+          description: Message sent successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Message sent successfully"
+                  groupMessage:
+                    type: object
+                    additionalProperties: true
+        '401':
+          description: Unauthorized access.
+
+    get:
+      tags:
+        - Group Messages
+      summary: Get messages from a group
+      description: Retrieves all messages from a specified group.
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The ID of the group from which messages are being retrieved.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Messages fetched successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Fetched messages successfully"
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '401':
+          description: Unauthorized access.
+
+  /group/{groupId}/message/{messageId}/text:
+    put:
+      tags:
+        - Group Messages
+      summary: Edit a group message
+      description: Allows a user to edit their message in a specified group.
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The ID of the group containing the message.
+          schema:
+            type: string
+        - name: messageId
+          in: path
+          required: true
+          description: The ID of the message to be edited.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: The new message content.
+                media:
+                  type: string
+                  description: Optional new media URL.
+      responses:
+        '200':
+          description: Message updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Message updated successfully"
+                  updatedMessage:
+                    type: object
+                    additionalProperties: true
+        '401':
+          description: Unauthorized access.
+        '404':
+          description: Message not found.
+
+  /group/{groupId}/message/{messageId}:
+    delete:
+      tags:
+        - Group Messages
+      summary: Delete a group message
+      description: Allows a user to delete their message from a specified group.
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The ID of the group containing the message.
+          schema:
+            type: string
+        - name: messageId
+          in: path
+          required: true
+          description: The ID of the message to be deleted.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Message deleted successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Message deleted successfully"
+        '401':
+          description: Unauthorized access.
+        '404':
+          description: Message not found.
+
+  /group/{groupId}/message/{messageId}/reactions:
+    post:
+      tags:
+        - Group Messages
+      summary: Add a reaction to a group message
+      description: Allows a user to add a reaction to a specified message in a group.
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The ID of the group containing the message.
+          schema:
+            type: string
+        - name: messageId
+          in: path
+          required: true
+          description: The ID of the message to which a reaction is being added.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reactionTypeId:
+                  type: string
+                  description: The ID of the reaction type being added.
+      responses:
+        '200':
+          description: Reaction added successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Reaction added successfully"
+                  updatedMessage:
+                    type: object
+                    additionalProperties: true
+        '401':
+          description: Unauthorized access.
+        '404':
+          description: Message or reaction type not found.

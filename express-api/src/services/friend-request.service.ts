@@ -18,6 +18,7 @@ export default class FriendRequestService {
       receiver: userId,
       status: "pending",
     });
+    console.log(userId);
 
     return friendRequests;
   }
@@ -48,10 +49,13 @@ export default class FriendRequestService {
   async getFriend(userId: string, friendId: string) {
     await checkUserExists(userId);
     await checkUserExists(friendId);
-    const friend = await this.userModel.findOne({
-      _id: userId,
-      friends: friendId,
-    });
+    const friend = await this.userModel
+      .findOne({
+        _id: userId,
+        friends: friendId,
+      })
+      .select("friends username email")
+      .populate("friends", "username");
 
     return friend;
   }
@@ -60,8 +64,39 @@ export default class FriendRequestService {
     senderId: string,
     receiverId: string
   ): Promise<IFriendRequest> {
-    await checkUserExists(senderId);
-    await checkUserExists(receiverId);
+    const sender = await checkUserExists(senderId);
+    const receiver = await checkUserExists(receiverId);
+
+    // check if friend request already exists
+    // check if the sender and receiver are the same
+    // check if the sender and receiver are already friends
+    // check if the sender has already sent a friend request to the receiver
+    // check if the receiver has already sent a friend request to the sender
+
+    const friendRequestExists = await this.friendRequestModel.findOne({
+      sender: senderId,
+      receiver: receiverId,
+    });
+
+    if (friendRequestExists)
+      throw new CustomError("Friend request exists", 400);
+
+    if (senderId === receiverId)
+      throw new CustomError("Cannot send friend request to self", 400);
+
+    if (sender.friends.includes(new mongoose.Types.ObjectId(receiverId)))
+      throw new CustomError("Already friends", 400);
+
+    if (receiver.friends.includes(new mongoose.Types.ObjectId(senderId)))
+      throw new CustomError("Already friends", 400);
+
+    const friendRequestExists2 = await this.friendRequestModel.findOne({
+      sender: receiverId,
+      receiver: senderId,
+    });
+
+    if (friendRequestExists2)
+      throw new CustomError("Friend request exists", 400);
 
     const friendRequestData = {
       sender: senderId,
@@ -106,6 +141,8 @@ export default class FriendRequestService {
     } catch (error) {
       await session.abortTransaction();
       session.endSession();
+      console.log(error);
+
       throw new CustomError("An error occurred", 500);
     }
   }
