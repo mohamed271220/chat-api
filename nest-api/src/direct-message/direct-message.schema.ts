@@ -1,7 +1,8 @@
-import { Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { ReactionSchema } from '../shared/reaction.schema';
+import { IDirectMessage } from './direct-message.interface';
 
-export const DirectMessageSchema = new Schema({
+const DirectMessageSchema = new Schema<IDirectMessage>({
   sender: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   receiver: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   conversation: {
@@ -28,3 +29,8 @@ DirectMessageSchema.pre('validate', function (next) {
     next();
   }
 });
+
+export const DirectMessage = model<IDirectMessage>(
+  'DirectMessage',
+  DirectMessageSchema,
+);

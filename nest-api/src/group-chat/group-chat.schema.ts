@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
+import { IGroupChat } from './group-chat.interface';
 
-export const GroupChatSchema = new Schema({
+export const GroupChatSchema = new Schema<IGroupChat>({
   name: { type: String, required: true },
   members: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
   creator: { type: Schema.Types.ObjectId, ref: 'User', required: true },
@@ -13,3 +14,8 @@ GroupChatSchema.pre('save', function (next) {
   ).map((id) => new mongoose.Types.ObjectId(id));
   next();
 });
+
+export const GroupChat = mongoose.model<IGroupChat>(
+  'GroupChat',
+  GroupChatSchema,
+);

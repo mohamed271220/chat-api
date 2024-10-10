@@ -1,7 +1,7 @@
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export interface ConversationDocument extends Document {
-  participants: string[];
+  participants: mongoose.Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
 }

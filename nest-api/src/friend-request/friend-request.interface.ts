@@ -1,8 +1,8 @@
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export interface IFriendRequest extends Document {
-  sender: string;
-  receiver: string;
+  sender: mongoose.Types.ObjectId;
+  receiver: mongoose.Types.ObjectId;
   status: 'pending' | 'accepted' | 'rejected';
   createdAt: Date;
 }

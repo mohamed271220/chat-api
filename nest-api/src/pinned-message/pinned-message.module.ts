@@ -14,6 +14,6 @@ import { MongooseModule } from '@nestjs/mongoose';
     ]),
   ],
   providers: [PinnedMessageService],
-  controllers: [PinnedMessageController]
+  controllers: [PinnedMessageController],
 })
 export class PinnedMessageModule {}

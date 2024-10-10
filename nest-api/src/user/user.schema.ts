@@ -1,15 +1,16 @@
-import { Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
+import { IUser } from './user.interface';
 
-export const UserSchema = new Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+const UserSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
-  phone: { type: String },
-  dateOfBirth: { type: Date },
-  gender: { type: String, enum: ['male', 'female', 'other'] },
-  role: { type: String, enum: ['admin', 'user'], default: 'user' },
-  lastLogin: { type: Date },
+  password: { type: String, required: true },
+  friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  isOnline: { type: Boolean, default: false },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
+  lastSeen: { type: Date },
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
 });
+
+export const User = model<IUser>('User', UserSchema);

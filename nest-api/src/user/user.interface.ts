@@ -1,15 +1,13 @@
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export interface IUser extends Document {
-  firstName: string;
-  lastName: string;
   username: string;
   email: string;
-  phone?: string;
-  dateOfBirth?: Date;
-  gender?: 'male' | 'female' | 'other';
-  role: 'admin' | 'user';
-  lastLogin?: Date;
+  password: string;
+  friends: mongoose.Types.ObjectId[];
+  isOnline: boolean;
+  resetPasswordToken?: string | null;
+  resetPasswordExpires?: Date | null;
+  lastSeen?: Date;
   createdAt: Date;
-  updatedAt: Date;
 }

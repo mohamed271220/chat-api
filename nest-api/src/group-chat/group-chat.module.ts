@@ -3,6 +3,7 @@ import { GroupChatService } from './group-chat.service';
 import { GroupChatController } from './group-chat.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { GroupChatSchema } from './group-chat.schema';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { GroupChatSchema } from './group-chat.schema';
         schema: GroupChatSchema,
       },
     ]),
+    AuthModule,
   ],
   providers: [GroupChatService],
   controllers: [GroupChatController],

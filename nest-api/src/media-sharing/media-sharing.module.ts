@@ -14,6 +14,6 @@ import { MediaSharingSchema } from './media-sharing.schema';
     ]),
   ],
   providers: [MediaSharingService],
-  controllers: [MediaSharingController]
+  controllers: [MediaSharingController],
 })
 export class MediaSharingModule {}

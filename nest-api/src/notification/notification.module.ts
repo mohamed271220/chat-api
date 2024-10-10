@@ -14,6 +14,6 @@ import { MongooseModule } from '@nestjs/mongoose';
     ]),
   ],
   providers: [NotificationService],
-  controllers: [NotificationController]
+  controllers: [NotificationController],
 })
 export class NotificationModule {}

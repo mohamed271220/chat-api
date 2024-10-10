@@ -14,6 +14,8 @@ import { NotificationModule } from './notification/notification.module';
 import { PinnedMessageModule } from './pinned-message/pinned-message.module';
 import { ReactionTypeModule } from './reaction-type/reaction-type.module';
 import { MessageReactionModule } from './message-reaction/message-reaction.module';
+import { ChatGateway } from './chat/chat.gateway';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -44,8 +46,8 @@ import { MessageReactionModule } from './message-reaction/message-reaction.modul
     PinnedMessageModule,
     ReactionTypeModule,
     MessageReactionModule,
-
-    // Import modules
+    ProfileModule,
   ],
+  providers: [ChatGateway],
 })
 export class AppModule {}
