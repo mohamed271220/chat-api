@@ -10,6 +10,11 @@ import {
   removeFriend,
   getSentFriendRequests,
 } from "../controllers/friend-request.controller";
+import {
+  acceptRejectFriendRequestValidator,
+  removeFriendValidator,
+  sendFriendRequestValidator,
+} from "../middleware/validators/friendRequestValidators";
 
 // /api/v1/friend-requests
 
@@ -28,15 +33,35 @@ router.get("/friends", authenticateToken, getFriends);
 router.get("/friends/:friendId", authenticateToken, getFriend);
 
 // send friend request
-router.post("/send/:receiverId", authenticateToken, sendFriendRequest);
+router.post(
+  "/send/:receiverId",
+  authenticateToken,
+  sendFriendRequestValidator,
+  sendFriendRequest
+);
 
 // accept friend request
-router.post("/accept/:requestId", authenticateToken, acceptFriendRequest);
+router.post(
+  "/accept/:requestId",
+  authenticateToken,
+  acceptRejectFriendRequestValidator,
+  acceptFriendRequest
+);
 
 // reject friend request
-router.post("/reject/:requestId", authenticateToken, rejectFriendRequest);
+router.post(
+  "/reject/:requestId",
+  authenticateToken,
+  acceptRejectFriendRequestValidator,
+  rejectFriendRequest
+);
 
 // remove friend
-router.delete("/friends/:friendId", authenticateToken, removeFriend);
+router.delete(
+  "/friends/:friendId",
+  authenticateToken,
+  removeFriendValidator,
+  removeFriend
+);
 
 export default router;

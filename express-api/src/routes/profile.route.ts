@@ -6,6 +6,10 @@ import {
   changeProfileDetails,
   deleteProfile,
 } from "../controllers/profile.controller";
+import {
+  validateCreateProfile,
+  validateUpdateProfile,
+} from "../middleware/validators/profileValidator";
 
 const router = express.Router();
 
@@ -15,10 +19,10 @@ const router = express.Router();
 router.get("/", authenticateToken, getProfile);
 
 // POST /api/v1/profile
-router.post("/", authenticateToken, createProfile);
+router.post("/", authenticateToken, validateCreateProfile, createProfile);
 
 // PUT /api/v1/profile
-router.put("/", authenticateToken, changeProfileDetails);
+router.put("/", authenticateToken, validateUpdateProfile, changeProfileDetails);
 
 // DELETE /api/v1/profile
 router.delete("/", authenticateToken, deleteProfile);

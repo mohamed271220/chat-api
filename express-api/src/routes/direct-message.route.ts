@@ -8,6 +8,7 @@ import {
   deleteDirectMessage,
   addReactionToDirectMessage,
 } from "../controllers/direct-message.controller";
+import { addReactionValidator, createMessageValidator } from "../middleware/validators/dmValidator";
 
 const router = express.Router();
 
@@ -18,7 +19,12 @@ const router = express.Router();
 router.get("/:receiverId", authenticateToken, getDirectMessages);
 
 // POST /api/v1/direct-message
-router.post("/:receiverId", authenticateToken, createDirectMessage);
+router.post(
+  "/:receiverId",
+  authenticateToken,
+  createMessageValidator,
+  createDirectMessage
+);
 
 // DELETE /api/v1/direct-message
 router.delete(
@@ -31,6 +37,7 @@ router.delete(
 router.post(
   "/:messageId/reactions",
   authenticateToken,
+  addReactionValidator,
   addReactionToDirectMessage
 );
 
