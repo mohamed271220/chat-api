@@ -12,7 +12,6 @@ import { userRequest } from "../interfaces";
 import { CustomError } from "../utils/CustomError";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import { Op } from "sequelize";
 
 export const getUserDetails = async (
   req: userRequest,
@@ -241,39 +240,6 @@ export const forgotPassword = async (
   }
 };
 
-export const resetPassword = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { token } = req.params;
-  const { password } = req.body;
-
-  try {
-    const user = await User.findOne({
-      where: {
-        resetPasswordToken: token,
-        resetPasswordExpires: { [Op.gt]: Date.now() }, // Token is still valid
-      },
-    });
-
-    if (!user) {
-      throw new CustomError("Invalid or expired token", 400);
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    user.password = hashedPassword;
-    user.resetPasswordToken = null;
-    user.resetPasswordExpires = null;
-    await user.save();
-
-    res.status(200).send("Password has been reset");
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
 
 export const changePassword = async (
   req: userRequest,
